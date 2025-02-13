@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 const VECTOR_LENGTH = 1536;
+const findParams = { year: { $lt: 1950 }, plot_embedding: { $exists: true } };
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('Connected to MongoDB Atlas'))
@@ -29,7 +30,8 @@ const cosineSimilarity = (vecA, vecB) => {
     const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
     return dotProduct / (magnitudeA * magnitudeB);
 };
-const findParams = { year: { $lt: 1950 }, plot_embedding: { $exists: true } };
+
+
 app.post('/search', async (req, res) => {
     const { vector } = req.body;
 
